@@ -36,6 +36,10 @@
 
 package tuwien.auto.calimero;
 
+import static java.lang.System.Logger.Level.DEBUG;
+
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -48,9 +52,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import tuwien.auto.calimero.datapoint.Datapoint;
 import tuwien.auto.calimero.datapoint.DatapointMap;
@@ -76,6 +77,7 @@ import tuwien.auto.calimero.dptxlator.DptXlator16BitSet;
 import tuwien.auto.calimero.dptxlator.TranslatorTypes;
 import tuwien.auto.calimero.knxnetip.KNXnetIPRouting;
 import tuwien.auto.calimero.link.medium.RFSettings;
+import tuwien.auto.calimero.log.LogService;
 import tuwien.auto.calimero.mgmt.Description;
 import tuwien.auto.calimero.mgmt.Destination;
 import tuwien.auto.calimero.mgmt.ManagementClient.EraseCode;
@@ -89,7 +91,7 @@ import tuwien.auto.calimero.mgmt.TransportLayer;
  */
 class TestDeviceLogic extends KnxDeviceServiceLogic
 {
-	private static final Logger logger = LoggerFactory.getLogger(TestDeviceLogic.class);
+	private static final Logger logger = LogService.getLogger(TestDeviceLogic.class);
 
 	// PID.PROJECT_INSTALLATION_ID
 	private static final int defProjectInstallationId = 0;
@@ -260,7 +262,7 @@ class TestDeviceLogic extends KnxDeviceServiceLogic
 		response[0] = 0xa;
 		final int tmedium = device.getDeviceLink().getKNXMedium().timeFactor();
 		final int wait = broadcast ? new Random().nextInt(10 * tmedium) : 0;
-		logger.debug("add random wait time of " + wait + " ms before response");
+		logger.log(DEBUG, "add random wait time of " + wait + " ms before response");
 		try {
 			Thread.sleep(wait);
 		}
@@ -331,7 +333,7 @@ class TestDeviceLogic extends KnxDeviceServiceLogic
 
 	private int onLinkResponse(final int flags, final Map<Integer, GroupAddress> groupObjects)
 	{
-		logger.info("link response: flags " + flags + " and group objects " + groupObjects);
+		logger.log(Level.INFO, "link response: flags " + flags + " and group objects " + groupObjects);
 		return 0;
 	}
 
